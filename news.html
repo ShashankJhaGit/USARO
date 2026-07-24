@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News & Updates · USARO</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ===== FEATURED POST ===== */
+    .featured-post {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+      background: var(--black-card);
+      border: 1px solid var(--gold-border-hi);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .featured-post:hover {
+      border-color: rgba(232,213,160,0.45);
+      box-shadow: 0 0 60px rgba(212,175,55,0.08);
+    }
+    .featured-img {
+      background: linear-gradient(145deg, rgba(212,175,55,0.14) 0%, rgba(30,30,30,0.9) 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .featured-img-icon { font-size: 6rem; opacity: 0.4; position: relative; z-index: 1; }
+    .featured-img::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 40% 50%, rgba(212,175,55,0.18), transparent);
+    }
+    .featured-img::after {
+      content: '';
+      position: absolute; top: 0; right: 0; bottom: 0; width: 80px;
+      background: linear-gradient(90deg, transparent, var(--black-card));
+    }
+    .featured-body {
+      padding: 3.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+    }
+    .featured-body::before {
+      content: '';
+      position: absolute; top: 0; right: 0; width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(212,175,55,0.07), transparent 70%);
+      pointer-events: none;
+    }
+    .featured-eyebrow {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .featured-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-bright); animation: pulse 2s ease-in-out infinite; }
+    .featured-label { font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); opacity: 0.7; }
+    .featured-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 700; line-height: 1.2;
+      color: var(--off-white); margin-bottom: 1rem;
+    }
+    .featured-excerpt { font-size: 0.87rem; opacity: 0.45; line-height: 1.85; margin-bottom: 1.8rem; }
+    .featured-meta { display: flex; align-items: center; gap: 1rem; font-size: 0.7rem; opacity: 0.3; }
+    .featured-meta-sep { opacity: 0.4; }
+
+    /* ===== NEWS GRID ===== */
+    .news-section-label {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .news-section-label-text { font-size: 0.6rem; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold); opacity: 0.55; white-space: nowrap; }
+    .news-section-label-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-border), transparent); }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+    .news-card {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px; overflow: hidden;
+      display: flex; flex-direction: column;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .news-card:hover {
+      border-color: rgba(232,213,160,0.38);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.45), 0 0 24px rgba(212,175,55,0.06);
+    }
+    .news-card-img {
+      height: 160px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(40,40,40,0.8));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; position: relative; overflow: hidden;
+      flex-shrink: 0;
+    }
+    .news-card-img::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+      background: linear-gradient(transparent, var(--black-card));
+    }
+    .news-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .news-cat {
+      font-size: 0.57rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.55; margin-bottom: 0.6rem;
+    }
+    .news-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; line-height: 1.28;
+      color: var(--off-white); margin-bottom: 0.7rem; flex: 1;
+    }
+    .news-excerpt {
+      font-size: 0.77rem; opacity: 0.38; line-height: 1.75;
+      margin-bottom: 1.2rem;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .news-excerpt.expanded { display: block; -webkit-line-clamp: unset; overflow: visible; }
+    .news-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .news-date { font-size: 0.67rem; opacity: 0.25; }
+    .read-more-btn {
+      font-size: 0.67rem; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.5; border: none; background: transparent;
+      cursor: none; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
+    }
+    .read-more-btn:hover { opacity: 1; }
+
+    /* ===== ANNOUNCEMENTS + NEWSLETTER ===== */
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    /* Announcements */
+    .ann-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .ann-header-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--off-white); }
+    .ann-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem; color: var(--gold); opacity: 0.5;
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      padding: 0.15rem 0.5rem; border-radius: 2px;
+    }
+    .ann-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .ann-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1rem 1.2rem;
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-left: 2px solid rgba(212,175,55,0.3);
+      border-radius: 0 3px 3px 0;
+      transition: border-left-color 0.25s, background 0.25s;
+    }
+    .ann-item:hover { border-left-color: var(--gold-bright); background: rgba(255,255,255,0.02); }
+    .ann-icon { font-size: 1rem; flex-shrink: 0; opacity: 0.7; }
+    .ann-title { font-size: 0.83rem; color: var(--off-white); margin-bottom: 0.2rem; line-height: 1.4; }
+    .ann-date { font-size: 0.67rem; opacity: 0.28; }
+
+    /* Newsletter */
+    .newsletter-box {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border-hi);
+      border-radius: 6px; padding: 2.5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+    }
+    .newsletter-box::after {
+      content: '';
+      position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.09), transparent 70%);
+      pointer-events: none;
+    }
+    .newsletter-icon { font-size: 2.5rem; margin-bottom: 1.2rem; }
+    .newsletter-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); margin-bottom: 0.7rem; }
+    .newsletter-desc { font-size: 0.82rem; opacity: 0.4; line-height: 1.8; margin-bottom: 2rem; }
+    .newsletter-form { display: flex; flex-direction: column; gap: 0.7rem; }
+
+    @media(max-width:1024px){ .featured-post{grid-template-columns:1fr;}.featured-img{min-height:200px;} }
+    @media(max-width:900px){ .news-grid{grid-template-columns:1fr 1fr;}.bottom-row{grid-template-columns:1fr;} }
+    @media(max-width:600px){ .news-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-ring"></div>
+<div class="grid-bg"></div><div class="orb orb-1"></div><div class="orb orb-2"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-brand">
+    <img src="USARO LOGO.png" alt="USARO" class="nav-logo-img">
+    <div><span class="nav-wordmark-main">USARO</span><span class="nav-wordmark-sub">Research Olympiad</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="about.html">About</a>
+    <a href="events.html">Events</a><a href="news.html">News</a>
+    <a href="events.html#register" class="nav-cta">Register</a>
+  </div>
+  <button id="hamburger">☰</button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a><a href="about.html">About</a>
+  <a href="events.html">Events</a><a href="news.html">News</a><a href="events.html#register">Register</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="eyebrow hero-animate">Updates & Announcements</div>
+  <div class="gold-line"></div>
+  <h1 class="section-title hero-animate" style="font-size:clamp(2.8rem,6vw,5.5rem);font-family:'Playfair Display',serif;font-weight:900;">
+    News from <em>USARO</em>
+  </h1>
+  <p class="section-desc hero-animate">The latest announcements, competition results, partnership updates, and research highlights from the USARO community.</p>
+</div>
+
+<section>
+
+  <!-- ===== FEATURED POST ===== -->
+  <div class="featured-post reveal">
+    <div class="featured-img">
+      <div class="featured-img-icon">📰</div>
+    </div>
+    <div class="featured-body">
+      <div class="featured-eyebrow">
+        <div class="featured-eyebrow-dot"></div>
+        <span class="featured-label">Featured Announcement</span>
+      </div>
+      <h2 class="featured-title">USARO is expanding its event calendar and outreach network</h2>
+      <p class="featured-excerpt">USARO is strengthening its outreach and student research support through expanded event programming, mentor access, and publication pathways for emerging researchers.</p>
+      <div class="featured-meta">
+        <span>USARO Team</span>
+        <span class="featured-meta-sep">·</span>
+        <span>July 9, 2026</span>
+        <span class="featured-meta-sep">·</span>
+        <span>Partnership</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NEWS GRID ===== -->
+  <div class="news-section-label reveal">
+    <span class="news-section-label-text">Recent Posts</span>
+    <div class="news-section-label-line"></div>
+  </div>
+
+  <div class="news-grid">
+
+    <!-- CARD 1 -->
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-card-img">🏅</div>
+      <div class="news-card-body">
+        <div class="news-cat">Competition</div>
+        <h3 class="news-title">USARO Announces New Virtual Event Series for 2026–2027</h3>
+        <p class="news-excerpt" id="excerpt-1">
+          USARO is launching a trio of virtual events designed to broaden student access to research development, case-work analysis, and presentation coaching throughout 2026 and 2027.
+          <br><br>These online sessions will support competitors with mentorship, deliverables guidance, and peer review before the next research cycle begins.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-1">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-card-img">🤝</div>
+      <div class="news-card-body">
+        <div class="news-cat">Partnership</div>
+        <h3 class="news-title">USARO Expands Mentorship and Collaboration Pathways</h3>
+        <p class="news-excerpt" id="excerpt-2">
+          USARO is broadening access to mentorship, academic networking, and community outreach opportunities for students preparing to participate in research events and showcases.
+          <br><br>These pathways are designed to support skill-building across STEM and social science disciplines.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-2">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="news-card reveal reveal-delay-3">
+      <div class="news-card-img">📚</div>
+      <div class="news-card-body">
+        <div class="news-cat">Research</div>
+        <h3 class="news-title">New Literature Highlights in USARO Research Library</h3>
+        <p class="news-excerpt" id="excerpt-3">
+          USARO updated its research library with six click-through papers spanning epidemics, immigration economics, network security, AI economics, economic thought, and computational science education.
+          <br><br>The library now includes direct links to full papers for easy student access and citation.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-3">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-card-img">🔬</div>
+      <div class="news-card-body">
+        <div class="news-cat">Spotlight</div>
+        <h3 class="news-title">Featured Research Focus: Epidemic Modeling for Policy Impact</h3>
+        <p class="news-excerpt" id="excerpt-4">
+          The site highlights epidemic modeling as a featured focus area, emphasizing how mathematical research can shape policy decisions and pandemic preparedness.
+          <br><br>This feature connects student readers with top papers that bridge theory and real-world health challenges.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-4">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-card-img">🎓</div>
+      <div class="news-card-body">
+        <div class="news-cat">Student News</div>
+        <h3 class="news-title">USARO Gears Up with Virtual Research Reviews and Mentorship Support</h3>
+        <p class="news-excerpt" id="excerpt-5">
+          USARO is preparing virtual review sessions and mentorship touchpoints to help students strengthen their hypothesis framing, analysis, and public-facing presentations.
+          <br><br>The initiative supports candidates across social science, computing, and quantitative research tracks.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-5">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="news-card reveal reveal-delay-3">
+      <div class="news-card-img">📅</div>
+      <div class="news-card-body">
+        <div class="news-cat">Event</div>
+        <h3 class="news-title">Virtual Presentation Event Set for July 2027</h3>
+        <p class="news-excerpt" id="excerpt-6">
+          USARO will host a virtual presentation event in July 2027 for student researchers to share advanced work with judges and collaborators from across the academic community.
+          <br><br>Registration and participation details will be posted in the coming months.
+        </p>
+        <div class="news-footer">
+          <span class="news-date">July 9, 2026</span>
+          <button class="read-more-btn" data-target="excerpt-6">Read more →</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /news-grid -->
+
+  <!-- ===== ANNOUNCEMENTS + NEWSLETTER ===== -->
+  <div class="bottom-row">
+
+    <!-- Announcements -->
+    <div class="reveal">
+      <div class="ann-header">
+        <div class="ann-header-title">Quick Announcements</div>
+        <!-- ADMIN: update count when adding/removing items -->
+        <span class="ann-count">4 updates</span>
+      </div>
+      <div class="ann-list">
+        <!-- ADMIN: Replace placeholder announcements with real ones. Copy/paste items as needed. -->
+        <div class="ann-item">
+          <div class="ann-icon">📌</div>
+          <div>
+            <div class="ann-title">Virtual event registrations are open for January, September, and July sessions.</div>
+            <div class="ann-date">July 9, 2026</div>
+          </div>
+        </div>
+        <div class="ann-item">
+          <div class="ann-icon">📌</div>
+          <div>
+            <div class="ann-title">The research library now includes six directly linked papers from 1990–2026.</div>
+            <div class="ann-date">July 9, 2026</div>
+          </div>
+        </div>
+        <div class="ann-item">
+          <div class="ann-icon">📌</div>
+          <div>
+            <div class="ann-title">USARO is expanding institutional support pathways for student research participation and mentorship.</div>
+            <div class="ann-date">July 9, 2026</div>
+          </div>
+        </div>
+        <div class="ann-item">
+          <div class="ann-icon">📌</div>
+          <div>
+            <div class="ann-title">Official outreach contact is now usaresearcholympiad@gmail.com for all event and collaboration inquiries.</div>
+            <div class="ann-date">July 9, 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="newsletter-box reveal reveal-delay-2">
+      <div class="newsletter-icon">✉️</div>
+      <div class="newsletter-title">Stay in the Loop</div>
+      <p class="newsletter-desc">Subscribe to the USARO newsletter for competition updates, research spotlights, and event announcements delivered to your inbox.</p>
+      <div class="newsletter-form">
+        <input type="email" class="form-input" placeholder="your@email.com" style="text-align:center;">
+        <button class="btn-primary newsletter-submit" style="width:100%;justify-content:center;">Subscribe to Newsletter</button>
+      </div>
+    </div>
+
+  </div><!-- /bottom-row -->
+
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">USARO</div>
+      <div class="footer-brand-sub">Research Olympiad</div>
+      <p class="footer-desc">Advancing student research, one discovery at a time. Connecting young researchers with the resources, mentorship, and recognition they deserve.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <div class="footer-col-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="news.html">News</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <div class="footer-col-links">
+        <a href="mailto:usaresearcholympiad@gmail.com">usaresearcholympiad@gmail.com</a>
+        <a href="events.html#register">Register for Event</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 USARO · All rights reserved</span>
+    <div class="footer-social">
+      <a href="#">Twitter / X</a>
+      <a href="https://www.linkedin.com/company/usaro-research-olympiad/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="#">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

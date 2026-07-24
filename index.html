@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USARO · Research Olympiad</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      padding: calc(var(--nav-height) + 5rem) 3.5rem 5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-left { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold-bright); opacity: 0.6; }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 1.02;
+      color: var(--off-white);
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-title em {
+      color: var(--gold);
+      font-style: italic;
+      position: relative;
+      display: inline-block;
+    }
+    .hero-title em::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-bright), transparent);
+    }
+    .hero-sub {
+      font-size: 1rem;
+      opacity: 0.5;
+      line-height: 1.85;
+      max-width: 420px;
+      margin-bottom: 3rem;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Right side: decorative panel */
+    .hero-right {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-self: stretch;
+      padding-top: 2rem;
+    }
+    .hero-card-big {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border-hi);
+      border-radius: 4px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+    }
+    .hero-card-big::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-card-big-label {
+      font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.5; margin-bottom: 1.2rem;
+    }
+    .hero-card-big-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 400; font-style: italic;
+      line-height: 1.4; color: var(--off-white);
+    }
+    .hero-card-big-quote em { color: var(--gold); font-style: normal; }
+    .hero-cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .hero-stat-card {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 1.4rem 1.6rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .hero-stat-card:hover {
+      border-color: rgba(232,213,160,0.4);
+      box-shadow: 0 0 24px rgba(212,175,55,0.08);
+    }
+    .hero-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .hero-stat-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.38; }
+
+    /* ===== MARQUEE STRIP ===== */
+    #marquee-strip {
+      width: 100%;
+      border-top: 1px solid var(--gold-border);
+      border-bottom: 1px solid var(--gold-border);
+      padding: 1.1rem 0;
+      background: var(--black-mid);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: max-content;
+      animation: marqueeScroll 32s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    .marquee-item {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--gold); opacity: 0.38;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 0 2.5rem;
+      display: inline-flex; align-items: center; gap: 2.5rem;
+    }
+    .marquee-item::after {
+      content: '✦'; font-style: normal; font-size: 0.45rem; opacity: 0.4; flex-shrink: 0;
+    }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ===== MISSION ===== */
+    #mission {
+      width: 100%;
+      background: var(--black-mid);
+      border-top: 1px solid var(--gold-border);
+      border-bottom: 1px solid var(--gold-border);
+    }
+    .mission-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 7rem 3.5rem;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 6rem; align-items: start;
+    }
+    .mission-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 10rem; font-weight: 900;
+      line-height: 1; color: var(--gold);
+      opacity: 0.06; position: absolute;
+      top: -2rem; left: -1rem;
+      pointer-events: none; select: none;
+    }
+    .pillar {
+      position: relative;
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 1.4rem 1.6rem;
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-left: 2px solid var(--gold-bright);
+      border-radius: 0 4px 4px 0;
+      transition: border-color 0.25s, box-shadow 0.3s;
+      margin-bottom: 1rem;
+    }
+    .pillar:hover {
+      border-color: var(--gold-border-hi);
+      border-left-color: var(--gold-bright);
+      box-shadow: 0 0 24px rgba(212,175,55,0.07), -4px 0 0 rgba(212,175,55,0.3);
+    }
+    .pillar-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .pillar-title { font-size: 0.88rem; font-weight: 500; color: var(--gold); margin-bottom: 0.25rem; letter-spacing: 0.02em; }
+    .pillar-text  { font-size: 0.8rem; opacity: 0.45; line-height: 1.7; }
+    .mission-quote-block { position: sticky; top: 6rem; }
+    .mission-big-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400; font-style: italic;
+      line-height: 1.35; color: var(--off-white);
+      border-left: 3px solid var(--gold-bright);
+      padding-left: 2rem;
+      margin-bottom: 2rem;
+    }
+    .mission-big-quote em { color: var(--gold); font-style: normal; }
+
+    /* ===== RESEARCH FEATURED ===== */
+    .research-bento {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.2rem;
+    }
+    .r-card {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px; padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .r-card::before {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .r-card:hover {
+      border-color: rgba(232,213,160,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 0 24px rgba(212,175,55,0.07);
+    }
+    .r-card.featured { grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+    .r-card-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; font-weight: 900; color: var(--gold);
+      opacity: 0.08; position: absolute; top: 0.5rem; right: 1rem;
+      line-height: 1; pointer-events: none;
+    }
+    .r-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700; line-height: 1.28;
+      margin: 0.8rem 0 0.7rem; color: var(--off-white);
+    }
+    .r-card.featured .r-title { font-size: 1.6rem; }
+    .r-abstract { font-size: 0.78rem; opacity: 0.42; line-height: 1.8; margin-bottom: 1.2rem; }
+    .r-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.7rem;
+    }
+    .r-author { color: var(--gold); opacity: 0.55; }
+    .r-year { opacity: 0.28; }
+
+    /* ===== TEAM PREVIEW ===== */
+    .team-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+    .t-card {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px; padding: 1.8rem 1.4rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .t-card:hover {
+      border-color: rgba(232,213,160,0.38);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 20px rgba(212,175,55,0.07);
+    }
+    .t-card::after {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 60%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .t-card:hover::after { opacity: 0.4; }
+    .t-avatar {
+      width: 70px; height: 70px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--black-raised), var(--slate));
+      border: 2px solid rgba(232,213,160,0.2);
+      margin: 0 auto 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--gold);
+      box-shadow: 0 0 20px rgba(212,175,55,0.1);
+    }
+    .t-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--gold); margin-bottom: 0.25rem; }
+    .t-role { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.35; }
+
+    /* ===== EVENTS MINI ===== */
+    #event-strip { width: 100%; background: var(--black-mid); border-top: 1px solid var(--gold-border); }
+    .event-list { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2.5rem; }
+    .event-row {
+      display: grid; grid-template-columns: 70px 1fr auto;
+      gap: 2rem; align-items: center;
+      padding: 1.4rem 1.8rem;
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .event-row:hover {
+      border-color: rgba(232,213,160,0.32);
+      box-shadow: 0 0 24px rgba(212,175,55,0.06);
+    }
+    .event-date { text-align: center; }
+    .event-month { font-size: 0.56rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.55; }
+    .event-day { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); font-weight: 700; line-height: 1; }
+    .event-title { font-size: 0.92rem; font-weight: 400; color: var(--off-white); margin-bottom: 0.3rem; }
+    .event-meta-txt { font-size: 0.73rem; opacity: 0.35; }
+
+    /* ===== PARTNERS MARQUEE ===== */
+    #partners {
+      width: 100%;
+      border-top: 1px solid var(--gold-border);
+      padding: 3rem 0;
+      overflow: hidden;
+    }
+    .partners-label {
+      text-align: center;
+      font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.35; margin-bottom: 2rem;
+    }
+    .partners-scroll { display: flex; gap: 5rem; animation: marqueeScroll 20s linear infinite; white-space: nowrap; }
+    .partner-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--gold); opacity: 0.25;
+      letter-spacing: 0.1em;
+      transition: opacity 0.25s;
+      flex-shrink: 0;
+    }
+    .partner-name:hover { opacity: 0.7; }
+
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .research-bento { grid-template-columns: 1fr 1fr; }
+      .r-card.featured { grid-row: span 1; }
+      .team-strip { grid-template-columns: repeat(2, 1fr); }
+      .mission-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .mission-quote-block { position: relative; top: 0; }
+    }
+    @media (max-width: 768px) {
+      #hero { padding: calc(var(--nav-height) + 3rem) 1.5rem 4rem; }
+      .research-bento { grid-template-columns: 1fr; }
+      .team-strip { grid-template-columns: 1fr 1fr; }
+      .event-row { grid-template-columns: 60px 1fr; }
+      .event-row .btn-outline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-brand">
+    <img src="USARO LOGO.png" alt="USARO" class="nav-logo-img">
+    <div>
+      <span class="nav-wordmark-main">USARO</span>
+      <span class="nav-wordmark-sub">Research Olympiad</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="events.html">Events</a>
+    <a href="news.html">News</a>
+    <a href="events.html#register" class="nav-cta">Register</a>
+  </div>
+  <button id="hamburger" aria-label="Menu">☰</button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="events.html">Events</a>
+  <a href="news.html">News</a>
+  <a href="events.html#register">Register</a>
+</div>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-left">
+    <div class="nsri-badge hero-animate"><div class="nsri-dot"></div> Student research. Structured opportunities.</div>
+    <h1 class="hero-title hero-animate">
+      Advancing<br><em>student</em><br>research.
+    </h1>
+    <p class="hero-sub hero-animate">
+      Connecting young researchers with the resources, mentorship, and recognition they deserve. Fostering the next generation of scientific leaders.
+    </p>
+    <div class="hero-actions hero-animate">
+      <a href="events.html#register" class="btn-primary">Register for an Event</a>
+      <a href="about.html" class="btn-outline">Explore About</a>
+    </div>
+  </div>
+  <div class="hero-right hero-animate">
+    <div class="hero-card-big">
+      <div class="hero-card-big-label">Our Mission</div>
+      <div class="hero-card-big-quote">
+        "Science advances one brave question at a time — every student deserves the stage to ask <em>theirs.</em>"
+      </div>
+    </div>
+    <div class="hero-cards-row">
+      <div class="hero-stat-card">
+        <div class="hero-stat-num count-up" data-count="0">—</div>
+        <div class="hero-stat-label">Researchers</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num count-up" data-count="0">—</div>
+        <div class="hero-stat-label">Publications</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num count-up" data-count="0">—</div>
+        <div class="hero-stat-label">Events Held</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num count-up" data-count="0">—</div>
+        <div class="hero-stat-label">Partners</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE STRIP -->
+<div id="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Research Excellence</span>
+    <span class="marquee-item">Student Innovation</span>
+    <span class="marquee-item">Peer-Reviewed Publications</span>
+    <span class="marquee-item">National Symposium</span>
+    <span class="marquee-item">Structured Events</span>
+    <span class="marquee-item">Mentorship Network</span>
+    <span class="marquee-item">Scientific Discovery</span>
+    <span class="marquee-item">Academic Integrity</span>
+    <span class="marquee-item">Research Excellence</span>
+    <span class="marquee-item">Student Innovation</span>
+    <span class="marquee-item">Peer-Reviewed Publications</span>
+    <span class="marquee-item">National Symposium</span>
+    <span class="marquee-item">Structured Events</span>
+    <span class="marquee-item">Mentorship Network</span>
+    <span class="marquee-item">Scientific Discovery</span>
+    <span class="marquee-item">Academic Integrity</span>
+  </div>
+</div>
+
+<!-- MISSION -->
+<div id="mission">
+  <div class="mission-inner">
+    <div>
+      <div class="section-label reveal">Our Purpose</div>
+      <div class="gold-line reveal"></div>
+      <div class="pillars">
+        <div class="pillar reveal reveal-delay-1">
+          <div class="pillar-icon">🔬</div>
+          <div><div class="pillar-title">Rigorous Research</div><div class="pillar-text">We uphold the highest standards of scientific methodology and academic integrity across all disciplines.</div></div>
+        </div>
+        <div class="pillar reveal reveal-delay-2">
+          <div class="pillar-icon">🤝</div>
+          <div><div class="pillar-title">Mentorship Network</div><div class="pillar-text">Students are paired with faculty advisors and mentors from leading partner universities.</div></div>
+        </div>
+        <div class="pillar reveal reveal-delay-3">
+          <div class="pillar-icon">🏆</div>
+          <div><div class="pillar-title">Recognition & Publication</div><div class="pillar-text">Top submissions are published in our peer-reviewed journal and presented nationally.</div></div>
+        </div>
+        <div class="pillar reveal reveal-delay-4">
+          <div class="pillar-icon">🌐</div>
+          <div><div class="pillar-title">Global Community</div><div class="pillar-text">Building an international network of young researchers committed to evidence-based discovery.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="mission-quote-block reveal reveal-delay-2">
+      <div class="section-label" style="margin-bottom:1.5rem;">Why USARO</div>
+      <blockquote class="mission-big-quote">
+        "Science advances one brave question at a time — and every student deserves the stage to ask <em>theirs.</em>"
+      </blockquote>
+      <p style="font-size:0.88rem;opacity:0.42;line-height:1.85;margin-bottom:2rem;">
+        USARO bridges the gap between student curiosity and genuine scholarly contribution. Through rigorous competition, mentorship, and publication, we transform passion into peer-reviewed reality.
+      </p>
+      <a href="about.html" class="btn-outline">Learn About USARO →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED RESEARCH
+<section>
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Featured Research</div>
+      <h2 class="section-title">Recent <em>Publications</em></h2>
+    </div>
+    <a href="about.html" class="btn-outline">About USARO →</a>
+  </div>
+  <div class="research-bento">
+    <div class="r-card featured reveal">
+      <div class="r-card-num">01</div>
+      <div>
+        <span class="tag">Mathematical Epidemiology</span>
+        <h3 class="r-title"><a href="https://arxiv.org/pdf/2103.00181" target="_blank" rel="noreferrer">Analysis, Prediction, and Control of Epidemics: A Survey from Scalar to Dynamic Network Models</a></h3>
+        <p class="r-abstract">This survey reviews epidemic dynamics from classic population systems to modern network models, showing how mathematical tools inform prediction, control, and public-health strategy.</p>
+        <div class="r-footer">
+          <span class="r-author">Lorenzo Zino and Ming Cao</span>
+          <span class="r-year">2021</span>
+        </div>
+      </div>
+      <a href="https://arxiv.org/pdf/2103.00181" target="_blank" rel="noreferrer" class="btn-ghost" style="margin-top:1.5rem;">Read Paper →</a>
+    </div>
+    <div class="r-card reveal reveal-delay-1">
+      <div class="r-card-num">02</div>
+      <span class="tag">Economic Studies</span>
+      <h3 class="r-title"><a href="https://www.aeaweb.org/articles?id=10.1257/pandp.20261000" target="_blank" rel="noreferrer">Where Are the Streets of Gold, and Why? A New Approach to Cross-Country Analysis and an Application to Immigrant Assimilation</a></h3>
+      <p class="r-abstract">A new approach to cross-country analysis reveals how educational and vocational institutions shape immigrant upward mobility across the Anglosphere and continental Europe.</p>
+      <div class="r-footer"><span class="r-author">Ran Abramitzky and Leah Boustan</span><span class="r-year">2026</span></div>
+    </div>
+    <div class="r-card reveal reveal-delay-2">
+      <div class="r-card-num">03</div>
+      <span class="tag">Network Security</span>
+      <h3 class="r-title"><a href="https://link.springer.com/content/pdf/10.1007/0-387-34805-0_5.pdf" target="_blank" rel="noreferrer">The use of Encryption in Kerberos for Network Authentication</a></h3>
+      <p class="r-abstract">This paper describes how Kerberos uses private-key encryption and a trusted third party to authenticate users and services securely across untrusted networks.</p>
+      <div class="r-footer"><span class="r-author">John T. Kohl</span><span class="r-year">1990</span></div>
+    </div>
+    <div class="r-card reveal reveal-delay-3">
+      <div class="r-card-num">04</div>
+      <span class="tag">AI Economics</span>
+      <h3 class="r-title"><a href="https://www.nber.org/books-and-chapters/economics-transformative-ai/introduction-economics-transformative-ai" target="_blank" rel="noreferrer">The Economics of Transformative AI</a></h3>
+      <p class="r-abstract">This work outlines how transformative AI reshapes economic growth, innovation, and labor markets while highlighting the need for frameworks that balance opportunity and systemic risk.</p>
+      <div class="r-footer"><span class="r-author">Ajay K. Agrawal, Erik Brynjolfsson & Anton Korinek</span><span class="r-year">2025</span></div>
+    </div>
+  </div>
+</section>
+ -->
+<!-- EVENTS STRIP -->
+<div id="event-strip">
+<section style="padding-top:0;padding-bottom:0;">
+  <div style="padding:7rem 0;">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-label">What's Coming</div>
+        <h2 class="section-title">Upcoming <em>Events</em></h2>
+      </div>
+      <a href="events.html" class="btn-outline">Full Schedule →</a>
+    </div>
+    <div class="event-list">
+      <div class="event-row reveal reveal-delay-1">
+        <div class="event-date"><div class="event-month">JAN</div><div class="event-day">2027</div></div>
+        <div>
+          <div style="margin-bottom:0.4rem;"><span class="tag">Virtual Workshop</span></div>
+          <div class="event-title">Testing Event</div>
+          <div class="event-meta-txt">📍 Virtual &nbsp;·&nbsp; January 2027 &nbsp;·&nbsp; Capacity 250</div>
+        </div>
+        <a href="events.html#register" class="btn-primary">Register</a>
+      </div>
+      <div class="event-row reveal reveal-delay-2">
+        <div class="event-date"><div class="event-month">SEP</div><div class="event-day">2026</div></div>
+        <div>
+          <div style="margin-bottom:0.4rem;"><span class="tag tag-blue">Virtual Seminar</span></div>
+          <div class="event-title">Case Study Event</div>
+          <div class="event-meta-txt">📍 Virtual &nbsp;·&nbsp; September 2026 &nbsp;·&nbsp; Capacity 300</div>
+        </div>
+        <a href="events.html#register" class="btn-outline">Register →</a>
+      </div>
+      <div class="event-row reveal reveal-delay-3">
+        <div class="event-date"><div class="event-month">JUL</div><div class="event-day">2027</div></div>
+        <div>
+          <div style="margin-bottom:0.4rem;"><span class="tag tag-green">Virtual Presentation</span></div>
+          <div class="event-title">Presentation Event</div>
+          <div class="event-meta-txt">📍 Virtual &nbsp;·&nbsp; July 2027 &nbsp;·&nbsp; Capacity 200</div>
+        </div>
+        <a href="events.html#register" class="btn-outline">Register →</a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PARTNERS -->
+<div id="partners">
+  <div class="partners-label">Institutional Partners & Collaborators</div>
+  <div style="overflow:hidden;">
+    <div class="partners-scroll">
+      <span class="partner-name">Academic Mentors</span>
+      <span class="partner-name">Research Advisors</span>
+      <span class="partner-name">University Networks</span>
+      <span class="partner-name">Student Communities</span>
+      <span class="partner-name">Academic Mentors</span>
+      <span class="partner-name">Research Advisors</span>
+      <span class="partner-name">University Networks</span>
+      <span class="partner-name">Student Communities</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">USARO</div>
+      <div class="footer-brand-sub">Research Olympiad</div>
+      <p class="footer-desc">Advancing student research, one discovery at a time. Connecting young researchers with the resources, mentorship, and recognition they deserve.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <div class="footer-col-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="news.html">News</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <div class="footer-col-links">
+        <a href="mailto:usaresearcholympiad@gmail.com">usaresearcholympiad@gmail.com</a>
+        <a href="events.html#register">Register for Event</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 USARO · All rights reserved</span>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/company/usaro-research-olympiad/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="mailto:usaresearcholympiad@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

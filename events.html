@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events · USARO</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* TAB BAR */
+    .tab-bar { display:flex;gap:0;border-bottom:1px solid var(--gold-border);margin-bottom:3rem; }
+
+    /* EVENT CARDS */
+    .events-stack { display:flex;flex-direction:column;gap:1rem; }
+    .event-card {
+      display:grid;grid-template-columns:100px 1fr auto;gap:2.5rem;align-items:center;
+      background:var(--black-card);border:1px solid var(--gold-border);border-radius:4px;
+      padding:2rem 2.5rem;position:relative;overflow:hidden;
+      transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;
+    }
+    .event-card::before {
+      content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+      background:linear-gradient(180deg,var(--gold-bright),transparent);
+      opacity:0;transition:opacity 0.3s;
+    }
+    .event-card:hover { border-color:rgba(232,213,160,0.38);box-shadow:0 0 36px rgba(212,175,55,0.07);transform:translateX(4px); }
+    .event-card:hover::before { opacity:0.8; }
+
+    .event-date-box {
+      text-align:center;
+      background:transparent;
+      border:none;
+      padding:0;
+    }
+    .event-month { font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);opacity:0.6; }
+    .event-day { font-family:'Playfair Display',serif;font-size:2.8rem;color:var(--gold);font-weight:700;line-height:1; }
+    .event-year { font-size:0.55rem;opacity:0.25;margin-top:2px; }
+
+    .event-title { font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--off-white);margin:0.5rem 0 0.4rem;line-height:1.2; }
+    .event-desc { font-size:0.8rem;opacity:0.4;line-height:1.7;max-width:540px;margin-bottom:0.7rem; }
+    .event-meta { display:flex;gap:1.5rem;flex-wrap:wrap; }
+    .event-meta-item { font-size:0.74rem;opacity:0.35;display:flex;align-items:center;gap:0.35rem; }
+    .event-actions { display:flex;flex-direction:column;gap:0.7rem;align-items:flex-end; }
+
+    /* PAST EVENTS */
+    .past-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    .past-card {
+      display:flex;gap:1.5rem;padding:1.4rem 1.8rem;
+      background:var(--black-card);border:1px solid rgba(232,213,160,0.07);border-radius:4px;
+      opacity:0.6;transition:opacity 0.25s,border-color 0.25s;
+    }
+    .past-card:hover { opacity:0.9;border-color:var(--gold-border); }
+    .past-date-box {
+      text-align:center;min-width:50px;
+      border:none;padding-right:0;
+    }
+    .past-month { font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.5; }
+    .past-day { font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);font-weight:700;line-height:1; }
+    .past-title { font-size:0.9rem;font-weight:400;color:var(--off-white);margin-bottom:0.3rem; }
+    .past-meta { font-size:0.72rem;opacity:0.3; }
+
+    /* REGISTRATION */
+    #register { width:100%;background:var(--black-mid);border-top:1px solid var(--gold-border); }
+    .register-inner {
+      max-width:1280px;margin:0 auto;padding:7rem 3.5rem;
+      display:grid;grid-template-columns:1fr 1.3fr;gap:6rem;align-items:start;
+    }
+    .form-wrap {
+      background:var(--black-card);
+      border:1px solid var(--gold-border-hi);
+      border-radius:6px;padding:3rem;position:relative;overflow:hidden;
+    }
+    .form-wrap::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--gold-bright),transparent);
+    }
+    .form-wrap::after {
+      content:'';position:absolute;top:0;right:0;width:200px;height:200px;
+      background:radial-gradient(circle,rgba(212,175,55,0.07),transparent 70%);pointer-events:none;
+    }
+    .form-title { font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--gold);margin-bottom:0.3rem; }
+    .form-subtitle { font-size:0.75rem;opacity:0.35;letter-spacing:0.08em;margin-bottom:2rem; }
+    .register-info-title { font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;line-height:1.1;margin-bottom:0.8rem; }
+    .register-info-title em { color:var(--gold);font-style:italic; }
+    .benefits { display:flex;flex-direction:column;gap:1rem;margin-top:2rem; }
+    .benefit {
+      display:flex;gap:1rem;align-items:flex-start;
+      padding:1rem 1.2rem;
+      background:var(--black-card);border:1px solid var(--gold-border);border-radius:3px;
+      transition:border-color 0.25s;
+    }
+    .benefit:hover { border-color:rgba(232,213,160,0.28); }
+    .benefit-check { color:var(--gold-bright);font-size:0.8rem;flex-shrink:0;margin-top:1px; }
+    .benefit-text { font-size:0.82rem;opacity:0.45;line-height:1.65; }
+
+    @media(max-width:1024px){ .register-inner{grid-template-columns:1fr;gap:3rem;} }
+    @media(max-width:768px){
+      .event-card{grid-template-columns:70px 1fr;gap:1.2rem;}
+      .event-actions{display:none;}
+      .past-grid{grid-template-columns:1fr;}
+      .register-inner{padding:4rem 1.5rem;}
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-ring"></div>
+<div class="grid-bg"></div><div class="orb orb-1"></div><div class="orb orb-2"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-brand">
+    <img src="USARO LOGO.png" alt="USARO" class="nav-logo-img">
+    <div><span class="nav-wordmark-main">USARO</span><span class="nav-wordmark-sub">Research Olympiad</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a><a href="about.html">About</a>
+    <a href="events.html">Events</a><a href="news.html">News</a>
+    <a href="events.html#register" class="nav-cta">Register</a>
+  </div>
+  <button id="hamburger">☰</button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a><a href="about.html">About</a>
+  <a href="events.html">Events</a><a href="news.html">News</a><a href="events.html#register">Register</a>
+</div>
+
+<div class="page-hero">
+  <div class="eyebrow hero-animate">Calendar</div>
+  <div class="gold-line"></div>
+  <h1 class="section-title hero-animate" style="font-size:clamp(2.8rem,6vw,5.5rem);font-family:'Playfair Display',serif;font-weight:900;">
+    Events & <em>Conferences</em>
+  </h1>
+  <p class="section-desc hero-animate">Conferences, seminars, and workshops where student researchers present, connect, and compete.</p>
+</div>
+
+<section>
+  <div class="tab-bar reveal">
+    <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
+    <button class="tab-btn" data-tab="past">Past Events</button>
+  </div>
+
+  <div data-panel="upcoming">
+    <div class="events-stack">
+      <!-- EVENT 1 -->
+      <div class="event-card reveal">
+        <div class="event-date-box">
+          <div class="event-month">JAN</div>
+          <div class="event-day">2027</div>
+          <div class="event-year">2027</div>
+        </div>
+        <div>
+          <div style="margin-bottom:0.5rem;"><span class="tag">Virtual Workshop</span></div>
+          <div class="event-title">Testing Event</div>
+          <p class="event-desc">A virtual session designed for students to test research tools, collaborate on methodology, and refine presentation skills with live feedback.</p>
+          <div class="event-meta">
+            <span class="event-meta-item">📍 Virtual</span>
+            <span class="event-meta-item">🕐 January 2027</span>
+            <span class="event-meta-item">👥 Capacity 250</span>
+          </div>
+        </div>
+        <div class="event-actions">
+          <a href="#register" class="btn-primary">Register Now</a>
+          <button class="btn-ghost">Details ↓</button>
+        </div>
+      </div>
+      <!-- EVENT 2 -->
+      <div class="event-card reveal reveal-delay-1">
+        <div class="event-date-box">
+          <div class="event-month">SEP</div>
+          <div class="event-day">2026</div>
+          <div class="event-year">2026</div>
+        </div>
+        <div>
+          <div style="margin-bottom:0.5rem;"><span class="tag tag-blue">Virtual Seminar</span></div>
+          <div class="event-title">Case Study Event</div>
+          <p class="event-desc">A virtual seminar focused on applied case studies, ideal for students interested in research design, data interpretation, and policy relevance.</p>
+          <div class="event-meta">
+            <span class="event-meta-item">📍 Virtual</span>
+            <span class="event-meta-item">🕐 September 2026</span>
+            <span class="event-meta-item">👥 Capacity 300</span>
+          </div>
+        </div>
+        <div class="event-actions">
+          <a href="#register" class="btn-outline">Register →</a>
+        </div>
+      </div>
+      <!-- EVENT 3 -->
+      <div class="event-card reveal reveal-delay-2">
+        <div class="event-date-box">
+          <div class="event-month">JUL</div>
+          <div class="event-day">2027</div>
+          <div class="event-year">2027</div>
+        </div>
+        <div>
+          <div style="margin-bottom:0.5rem;"><span class="tag tag-green">Virtual Presentation</span></div>
+          <div class="event-title">Presentation Event</div>
+          <p class="event-desc">A virtual showcase where student research teams present findings to peers, mentors, and judges in a structured review format.</p>
+          <div class="event-meta">
+            <span class="event-meta-item">📍 Virtual</span>
+            <span class="event-meta-item">🕐 July 2027</span>
+            <span class="event-meta-item">👥 Capacity 200</span>
+          </div>
+        </div>
+        <div class="event-actions">
+          <a href="#register" class="btn-outline">Register →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-panel="past" class="hidden">
+    <div class="past-grid">
+      <div class="past-card reveal"><div class="past-date-box"><div class="past-month">[Mon]</div><div class="past-day">—</div></div><div><div class="past-title">[Past Event Name]</div><div class="past-meta">📍 [Location] · 👥 [#] attended</div></div></div>
+      <div class="past-card reveal reveal-delay-1"><div class="past-date-box"><div class="past-month">[Mon]</div><div class="past-day">—</div></div><div><div class="past-title">[Past Event Name]</div><div class="past-meta">📍 [Location] · 👥 [#] attended</div></div></div>
+      <div class="past-card reveal reveal-delay-2"><div class="past-date-box"><div class="past-month">[Mon]</div><div class="past-day">—</div></div><div><div class="past-title">[Past Event Name]</div><div class="past-meta">📍 [Location] · 👥 [#] attended</div></div></div>
+      <div class="past-card reveal reveal-delay-3"><div class="past-date-box"><div class="past-month">[Mon]</div><div class="past-day">—</div></div><div><div class="past-title">[Past Event Name]</div><div class="past-meta">📍 [Location] · 👥 [#] attended</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<div id="register">
+  <div class="register-inner">
+    <div class="reveal">
+      <div class="section-label">Sign Up</div>
+      <div class="gold-line"></div>
+      <h2 class="register-info-title">Reserve Your <em>Spot</em></h2>
+      <p style="font-size:0.88rem;opacity:0.42;line-height:1.85;max-width:400px;margin-top:0.5rem;">Registration is now a simple placeholder flow for upcoming USARO events. Confirmation details will be shared once the event schedule is finalized.</p>
+      <div class="benefits">
+        <div class="benefit"><span class="benefit-check">✦</span><span class="benefit-text">Instant confirmation email with event details and schedule</span></div>
+        <div class="benefit"><span class="benefit-check">✦</span><span class="benefit-text">Access to event materials, slides, and recordings</span></div>
+        <div class="benefit"><span class="benefit-check">✦</span><span class="benefit-text">Networking opportunities with researchers and faculty</span></div>
+        <div class="benefit"><span class="benefit-check">✦</span><span class="benefit-text">Certificate of participation upon completion</span></div>
+        <div class="benefit"><span class="benefit-check">✦</span><span class="benefit-text">Priority access to future USARO events</span></div>
+      </div>
+    </div>
+    <div class="form-wrap reveal reveal-delay-2">
+      <div class="form-title">Event Registration</div>
+      <div class="form-subtitle">USARO Research Olympiad · Placeholder registration form</div>
+      <form id="reg-form" novalidate>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input type="text" id="reg-first" class="form-input" placeholder="Jane" required></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input type="text" id="reg-last" class="form-input" placeholder="Smith" required></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email Address</label><input type="email" id="reg-email" class="form-input" placeholder="jane@school.edu" required></div>
+        <div class="form-group"><label class="form-label">Institutional Affiliation</label><input type="text" id="reg-school" class="form-input" placeholder="School / University / Independent" required></div>
+        <div class="form-group">
+          <label class="form-label">Select Event</label>
+          <select id="reg-event" class="form-select" required>
+            <option value="">Choose an event…</option>
+            <option>[Event Name 1] — [Date]</option>
+            <option>[Event Name 2] — [Date]</option>
+            <option>[Event Name 3] — [Date]</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Participant Role</label>
+          <select id="reg-role" class="form-select">
+            <option>Student Researcher / Competitor</option>
+            <option>Faculty Advisor / Mentor</option>
+            <option>Industry Professional</option>
+            <option>Press / Media</option>
+            <option>General Attendee</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Research Area <span style="opacity:0.3;font-size:0.65rem;text-transform:none;letter-spacing:0;">(optional)</span></label><input type="text" id="reg-research" class="form-input" placeholder="e.g. Computational Biology, Climate Science…"></div>
+        <div class="form-group"><label class="form-label">Additional Notes <span style="opacity:0.3;font-size:0.65rem;text-transform:none;letter-spacing:0;">(optional)</span></label><textarea id="reg-notes" class="form-textarea" placeholder="Accessibility needs, dietary restrictions, or questions…"></textarea></div>
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:0.78rem;">Submit Registration</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="footer-inner">
+    <div><div class="footer-brand-name">USARO</div><div class="footer-brand-sub">Research Olympiad</div><p class="footer-desc">Advancing student research, one discovery at a time.</p></div>
+    <div><div class="footer-col-title">Navigate</div><div class="footer-col-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="news.html">News</a></div></div>
+    <div><div class="footer-col-title">Contact</div><div class="footer-col-links"><a href="mailto:usaresearcholympiad@gmail.com">usaresearcholympiad@gmail.com</a></div></div>
+  </div>
+  <div class="footer-bottom"><span class="footer-copy">© 2026 USARO · All rights reserved</span><div class="footer-social"><a href="https://www.linkedin.com/company/usaro-research-olympiad/" target="_blank" rel="noreferrer">LinkedIn</a><a href="mailto:usaresearcholympiad@gmail.com">Email</a></div></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

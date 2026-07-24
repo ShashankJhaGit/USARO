@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About · USARO</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+    .about-card {
+      background: var(--black-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 100% 100%, rgba(212,175,55,0.08), transparent);
+      pointer-events: none;
+    }
+    .about-card:hover {
+      border-color: rgba(232,213,160,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 42px rgba(0,0,0,0.35), 0 0 24px rgba(212,175,55,0.06);
+    }
+    .about-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .about-card p {
+      font-size: 0.82rem;
+      opacity: 0.65;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .about-card .pill {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      padding: 0.35rem 0.7rem;
+      border-radius: 2px;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Skills list inside competition cards */
+    .skills-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    .skills-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .skills-list li {
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+      color: var(--gold);
+      opacity: 0.75;
+      background: rgba(212,175,55,0.06);
+      border: 1px solid var(--gold-border);
+      padding: 0.25rem 0.55rem;
+      border-radius: 2px;
+    }
+
+    /* Mission / intro section */
+    .mission-block {
+      max-width: 820px;
+      margin: 0 auto 1.8rem;
+      text-align: center;
+    }
+    .mission-block p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      opacity: 0.7;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Field tags */
+    .fields-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
+      margin-bottom: 2.2rem;
+    }
+    .field-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-border);
+      background: var(--gold-dim);
+      padding: 0.55rem 1.1rem;
+      border-radius: 2px;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      text-align: center;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .section-subdesc {
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.55;
+      max-width: 640px;
+      margin: 0 auto 1.8rem;
+      line-height: 1.8;
+    }
+
+    .section-spacer {
+      margin-top: 2.5rem;
+    }
+
+    .page-hero {
+      padding-bottom: 2.5rem;
+    }
+
+    section {
+      padding-top: 4.5rem;
+      padding-bottom: 4.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-ring"></div>
+<div class="grid-bg"></div><div class="orb orb-1"></div><div class="orb orb-2"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-brand">
+    <img src="USARO LOGO.png" alt="USARO" class="nav-logo-img">
+    <div><span class="nav-wordmark-main">USARO</span><span class="nav-wordmark-sub">Research Olympiad</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="events.html">Events</a>
+    <a href="news.html">News</a>
+    <a href="events.html#register" class="nav-cta">Register</a>
+  </div>
+  <button id="hamburger" aria-label="Menu">☰</button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="events.html">Events</a>
+  <a href="news.html">News</a>
+  <a href="events.html#register">Register</a>
+</div>
+
+<div class="page-hero">
+  <div class="eyebrow hero-animate">About USARO</div>
+  <div class="gold-line"></div>
+  <h1 class="section-title hero-animate" style="font-size:clamp(2.8rem,6vw,5.5rem);font-family:'Playfair Display',serif;font-weight:900;">
+    Applied Research, <em>Real Impact</em>
+  </h1>
+  <p class="section-desc hero-animate">USARO is a national research competition designed to lead students into the real world by conducting applied research across multiple fields.</p>
+</div>
+
+<section>
+  <div class="mission-block reveal">
+    <p>USARO is designed to bridge the gap between ambition and opportunity for students who want to engage in meaningful research. These students face real barriers &mdash; less access to research labs, mentorship with researchers, or funding to apply research to real-world problems. USARO is built to close that gap.</p>
+  </div>
+
+  <div class="fields-row reveal">
+    <span class="field-tag">Engineering</span>
+    <span class="field-tag">Healthcare</span>
+    <span class="field-tag">Computer Science &amp; Cybersecurity</span>
+    <span class="field-tag">Finance &amp; Economics</span>
+  </div>
+</section>
+
+<section class="section-spacer">
+  <h2 class="section-heading reveal">Competitions</h2>
+  <p class="section-subdesc reveal">Three formats, each testing a different dimension of research readiness.</p>
+
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <span class="pill">Quarterly</span>
+      <h3>Case Study Competitions</h3>
+      <p>Competitors are presented with a scenario drawn from healthcare, computer science, engineering, economics, or public policy, and must analyze the available information, identify key challenges, and propose evidence-based solutions. Cases may involve ethical dilemmas, technical failures, public health crises, cybersecurity incidents, market disruptions, or engineering design challenges. Rather than rewarding memorization, these competitions evaluate a student's ability to interpret information, think critically, justify decisions with research, and communicate practical recommendations.</p>
+      <div class="skills-label">Skills Assessed</div>
+      <ul class="skills-list">
+        <li>Critical thinking</li>
+        <li>Evidence-based decision making</li>
+        <li>Research interpretation</li>
+        <li>Problem solving</li>
+        <li>Written &amp; verbal communication</li>
+      </ul>
+    </div>
+
+    <div class="about-card reveal reveal-delay-1">
+      <span class="pill">Biannual</span>
+      <h3>Research Knowledge Testing Events</h3>
+      <p>These events assess a competitor's understanding of scientific literature, research methodology, experimental design, statistics, and discipline-specific concepts. Questions are developed from published academic papers and research principles rather than standard classroom curricula. Competitors are expected to analyze figures, interpret data, evaluate methodologies, and apply research concepts to unfamiliar situations. The highest-performing students receive national recognition and demonstrate exceptional readiness for advanced research opportunities.</p>
+      <div class="skills-label">Skills Assessed</div>
+      <ul class="skills-list">
+        <li>Scientific literacy</li>
+        <li>Data interpretation</li>
+        <li>Experimental design</li>
+        <li>Statistical reasoning</li>
+        <li>Academic reading comprehension</li>
+      </ul>
+    </div>
+
+    <div class="about-card reveal reveal-delay-2">
+      <span class="pill">Annual</span>
+      <h3>Research Presentation Event</h3>
+      <p>Students present either an original research project or a well-developed research proposal to a panel of university professors and research professionals, and are evaluated on the quality of their research, originality, communication skills, and ability to defend their ideas in a live Q&amp;A. Outstanding presentations may lead to mentorship opportunities &mdash; guidance in expanding a project, conducting the proposed study, or preparing work for publication or conference presentation.</p>
+      <div class="skills-label">Skills Assessed</div>
+      <ul class="skills-list">
+        <li>Research communication</li>
+        <li>Scientific reasoning</li>
+        <li>Presentation skills</li>
+        <li>Research methodology</li>
+        <li>Professional discussion</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section-spacer">
+  <h2 class="section-heading reveal">Accessibility &amp; Competition Philosophy</h2>
+  <p class="section-subdesc reveal">USARO is built on the belief that exceptional researchers can come from any background. Every competition rewards curiosity, analytical thinking, creativity, and sound methodology &mdash; not access to expensive laboratories or institutional resources.</p>
+
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <h3>No Lab Required</h3>
+      <p>Students are not expected to have access to university laboratories, specialized equipment, or institutional research programs. Many successful projects can be completed using publicly available datasets, computational methods, literature reviews, simulations, surveys, or theoretical analysis.</p>
+    </div>
+
+    <div class="about-card reveal reveal-delay-1">
+      <h3>Skill Over Resources</h3>
+      <p>Judging emphasizes the quality of a student's ideas, reasoning, methodology, and communication instead of the amount of funding, equipment, or mentorship available during the project. Competitors are rewarded for demonstrating strong research practices and thoughtful problem-solving.</p>
+    </div>
+
+    <div class="about-card reveal reveal-delay-2">
+      <h3>Free &amp; Digital-First</h3>
+      <p>USARO competitions are conducted primarily online, allowing students from across the United States to participate without the financial burden of travel or registration costs &mdash; while maintaining rigorous academic standards and meaningful interactions with judges and mentors.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">USARO</div>
+      <div class="footer-brand-sub">Research Olympiad</div>
+      <p class="footer-desc">Advancing student research with structured events, mentorship, and recognition.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <div class="footer-col-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="news.html">News</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <div class="footer-col-links">
+        <a href="mailto:usaresearcholympiad@gmail.com">usaresearcholympiad@gmail.com</a>
+        <a href="events.html#register">Register for Event</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 USARO · All rights reserved</span>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/company/usaro-research-olympiad/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="mailto:usaresearcholympiad@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
